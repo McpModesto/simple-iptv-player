@@ -1,12 +1,16 @@
 {
   "name": "electron-iptv",
   "version": "0.0.0",
+  "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "electron:dev": "concurrently \"ng serve\" \"wait-on http://localhost:4200 && electron . --dev\"",
+    "electron:build": "ng build --configuration production && electron-builder",
+    "electron:start": "electron ."
   },
   "prettier": {
     "printWidth": 100,
@@ -29,6 +33,7 @@
     "@angular/forms": "^21.1.0",
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
+    "hls.js": "^1.6.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -36,8 +41,34 @@
     "@angular/build": "^21.1.4",
     "@angular/cli": "^21.1.4",
     "@angular/compiler-cli": "^21.1.0",
+    "concurrently": "^9.2.1",
+    "electron": "^40.4.1",
+    "electron-builder": "^26.7.0",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "wait-on": "^9.0.4"
+  },
+  "build": {
+    "appId": "com.electron-iptv.app",
+    "productName": "Electron IPTV",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/electron-iptv/browser/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/favicon.ico"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

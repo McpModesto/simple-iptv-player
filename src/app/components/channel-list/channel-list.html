@@ -1,0 +1,79 @@
+<div class="channel-list">
+  <!-- Search -->
+  <div class="search-box">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input
+      type="text"
+      placeholder="Buscar canales..."
+      [value]="playlist.searchQuery()"
+      (input)="onSearch($event)"
+      class="search-input"
+    />
+  </div>
+
+  <!-- Group filter -->
+  @if (playlist.groups().length > 1) {
+    <div class="group-filter">
+      <button
+        class="group-chip"
+        [class.active]="playlist.selectedGroup() === null"
+        (click)="selectGroup(null)"
+      >
+        Todos
+      </button>
+      @for (group of playlist.groups(); track group.name) {
+        <button
+          class="group-chip"
+          [class.active]="playlist.selectedGroup() === group.name"
+          (click)="selectGroup(group.name)"
+        >
+          {{ group.name }}
+          <span class="group-count">{{ group.channels.length }}</span>
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Channel list -->
+  <div class="channels">
+    @for (channel of playlist.filteredChannels(); track channel.url) {
+      <button
+        class="channel-item"
+        [class.active]="selectedChannel?.url === channel.url"
+        (click)="selectChannel(channel)"
+      >
+        <div class="channel-logo">
+          @if (channel.logo) {
+            <img
+              [src]="channel.logo"
+              [alt]="channel.name"
+              (error)="$any($event.target).style.display='none'"
+            />
+          }
+          @if (!channel.logo) {
+            <div class="channel-logo-placeholder">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 6h-7.59l3.29-3.29L16 2l-4 4-4-4-.71.71L10.59 6H3c-1.1 0-2 .89-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.11-.9-2-2-2zm0 14H3V8h18v12z"/>
+              </svg>
+            </div>
+          }
+        </div>
+        <div class="channel-info">
+          <span class="channel-name">{{ channel.name }}</span>
+          @if (channel.group && channel.group !== 'Sin grupo') {
+            <span class="channel-group">{{ channel.group }}</span>
+          }
+        </div>
+      </button>
+    } @empty {
+      @if (playlist.channels().length > 0) {
+        <div class="empty-state">
+          <p>No se encontraron canales</p>
+        </div>
+      }
+    }
+  </div>
+</div>
