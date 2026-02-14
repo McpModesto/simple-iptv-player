@@ -3,6 +3,7 @@ import { ChannelList } from './components/channel-list/channel-list';
 import { VideoPlayer } from './components/video-player/video-player';
 import { PlaylistLoader } from './components/playlist-loader/playlist-loader';
 import { PlaylistService } from './services/playlist.service';
+import { StorageService } from './services/storage.service';
 import { Channel } from './models/channel.model';
 
 @Component({
@@ -13,6 +14,7 @@ import { Channel } from './models/channel.model';
 })
 export class App {
   protected readonly playlist = inject(PlaylistService);
+  protected readonly storage = inject(StorageService);
   protected readonly currentChannel = signal<Channel | null>(null);
   protected readonly sidebarCollapsed = signal(false);
   protected readonly playlistLoader = viewChild<PlaylistLoader>('loader');
@@ -27,5 +29,18 @@ export class App {
 
   protected toggleSidebar(): void {
     this.sidebarCollapsed.update(v => !v);
+  }
+
+  protected async loadSavedPlaylist(id: string): Promise<void> {
+    try {
+      await this.playlist.loadSavedPlaylist(id);
+    } catch (e) {
+      console.error('Error loading saved playlist:', e);
+    }
+  }
+
+  protected removeSavedPlaylist(event: MouseEvent, id: string): void {
+    event.stopPropagation();
+    this.storage.removePlaylist(id);
   }
 }

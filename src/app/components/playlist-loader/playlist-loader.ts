@@ -1,6 +1,7 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlaylistService } from '../../services/playlist.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-playlist-loader',
@@ -10,6 +11,7 @@ import { PlaylistService } from '../../services/playlist.service';
 })
 export class PlaylistLoader {
   private readonly playlist = inject(PlaylistService);
+  protected readonly storage = inject(StorageService);
   readonly loaded = output<void>();
 
   protected readonly url = signal('');
@@ -66,6 +68,26 @@ export class PlaylistLoader {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  protected async loadSaved(id: string): Promise<void> {
+    this.isLoading.set(true);
+    this.error.set('');
+
+    try {
+      await this.playlist.loadSavedPlaylist(id);
+      this.showModal.set(false);
+      this.loaded.emit();
+    } catch (e) {
+      this.error.set('No se pudo cargar la playlist guardada.');
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  protected removeSaved(event: MouseEvent, id: string): void {
+    event.stopPropagation();
+    this.storage.removePlaylist(id);
   }
 
   protected onBackdropClick(event: MouseEvent): void {

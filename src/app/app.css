@@ -165,3 +165,115 @@
   display: flex;
   min-width: 0;
 }
+
+/* Saved playlists in sidebar */
+.saved-playlists-sidebar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px;
+}
+
+.saved-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.saved-sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.saved-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  color: #fff;
+}
+
+.saved-sidebar-item:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.saved-sidebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.saved-sidebar-icon svg {
+  width: 16px;
+  height: 16px;
+  color: #818cf8;
+}
+
+.saved-sidebar-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.saved-sidebar-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saved-sidebar-meta {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.saved-sidebar-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  opacity: 0;
+}
+
+.saved-sidebar-item:hover .saved-sidebar-delete {
+  opacity: 1;
+}
+
+.saved-sidebar-delete svg {
+  width: 14px;
+  height: 14px;
+}
+
+.saved-sidebar-delete:hover {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}

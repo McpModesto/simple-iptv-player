@@ -1,8 +1,10 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { Channel, ChannelGroup } from '../models/channel.model';
+import { StorageService } from './storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class PlaylistService {
+  private readonly storage = inject(StorageService);
   private readonly _channels = signal<Channel[]>([]);
   private readonly _searchQuery = signal('');
   private readonly _selectedGroup = signal<string | null>(null);
@@ -68,7 +70,15 @@ export class PlaylistService {
       }
       const text = await response.text();
       this.parseM3U(text);
-      this._playlistName.set(this.extractPlaylistName(url));
+      const name = this.extractPlaylistName(url);
+      this._playlistName.set(name);
+
+      this.storage.savePlaylist({
+        name,
+        url,
+        source: 'url',
+        channelCount: this._channels().length,
+      });
     } catch (error) {
       console.error('Error cargando playlist:', error);
       throw error;
@@ -80,6 +90,14 @@ export class PlaylistService {
   loadFromText(text: string, name = 'Playlist local'): void {
     this.parseM3U(text);
     this._playlistName.set(name);
+
+    this.storage.savePlaylist({
+      name,
+      url: '',
+      source: 'file',
+      channelCount: this._channels().length,
+      content: text,
+    });
   }
 
   private extractPlaylistName(url: string): string {
@@ -154,5 +172,19 @@ export class PlaylistService {
     this._searchQuery.set('');
     this._selectedGroup.set(null);
     this._playlistName.set('');
+  }
+
+  async loadSavedPlaylist(id: string): Promise<void> {
+    const saved = this.storage.getPlaylist(id);
+    if (!saved) throw new Error('Playlist no encontrada');
+
+    if (saved.source === 'url') {
+      await this.loadFromUrl(saved.url);
+    } else if (saved.content) {
+      this.parseM3U(saved.content);
+      this._playlistName.set(saved.name);
+    } else {
+      throw new Error('No se encontró el contenido de la playlist');
+    }
   }
 }
