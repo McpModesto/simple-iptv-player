@@ -15,9 +15,9 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
-    icon: path.join(__dirname, '..', 'public', 'favicon.ico'),
+    icon: path.join(__dirname, '..', 'public', 'favicon.png'),
     show: false,
-    title: 'Electron IPTV',
+    title: 'Simple IPTV Player',
   });
 
   // Determine whether to load from dev server or production build
