@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, inject, signal, viewChild, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { ChannelList } from './components/channel-list/channel-list';
 import { VideoPlayer } from './components/video-player/video-player';
 import { PlaylistLoader } from './components/playlist-loader/playlist-loader';
@@ -12,12 +12,25 @@ import { Channel } from './models/channel.model';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit, OnDestroy {
+  private readonly ngZone = inject(NgZone);
   protected readonly playlist = inject(PlaylistService);
   protected readonly storage = inject(StorageService);
   protected readonly currentChannel = signal<Channel | null>(null);
   protected readonly sidebarCollapsed = signal(false);
   protected readonly playlistLoader = viewChild<PlaylistLoader>('loader');
+
+  ngOnInit(): void {
+    window.electronAPI?.on('fromMain', (...args: unknown[]) => {
+      if (args[0] === 'open-playlist') {
+        this.ngZone.run(() => this.openPlaylistLoader());
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup handled by Electron's channel removal on window close
+  }
 
   protected onChannelSelected(channel: Channel): void {
     this.currentChannel.set(channel);
