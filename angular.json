@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "electron-iptv": {
+    "simple-iptv-player": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "electron-iptv:build:production"
+              "buildTarget": "simple-iptv-player:build:production"
             },
             "development": {
-              "buildTarget": "electron-iptv:build:development"
+              "buildTarget": "simple-iptv-player:build:development"
             }
           },
           "defaultConfiguration": "development"

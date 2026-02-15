@@ -103,7 +103,7 @@ describe('App', () => {
   it('should not throw when loadSavedPlaylist fails', async () => {
     const fixture = TestBed.createComponent(App);
     vi.spyOn(playlistService, 'loadSavedPlaylist').mockRejectedValue(new Error('fail'));
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
     await (fixture.componentInstance as any).loadSavedPlaylist('bad-id');
     expect(consoleSpy).toHaveBeenCalled();

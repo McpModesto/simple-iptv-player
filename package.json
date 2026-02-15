@@ -1,6 +1,6 @@
 {
-  "name": "electron-iptv",
-  "version": "0.0.0",
+  "name": "simple-iptv-player",
+  "version": "0.0.1",
   "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
@@ -50,13 +50,13 @@
     "wait-on": "^9.0.4"
   },
   "build": {
-    "appId": "com.electron-iptv.app",
+    "appId": "com.simple-iptv-player.app",
     "productName": "Simple IPTV Player",
     "directories": {
       "output": "release"
     },
     "files": [
-      "dist/electron-iptv/browser/**/*",
+      "dist/simple-iptv-player/browser/**/*",
       "electron/**/*"
     ],
     "win": {

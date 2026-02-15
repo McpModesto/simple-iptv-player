@@ -69,7 +69,7 @@ export class VideoPlayer implements OnDestroy {
 
       this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
         this.isBuffering.set(false);
-        videoEl.play().catch(() => {});
+        videoEl.play().catch(() => { });
       });
 
       this.hls.on(Hls.Events.ERROR, (_event, data) => {
@@ -94,13 +94,13 @@ export class VideoPlayer implements OnDestroy {
       videoEl.src = url;
       videoEl.addEventListener('loadedmetadata', () => {
         this.isBuffering.set(false);
-        videoEl.play().catch(() => {});
+        videoEl.play().catch(() => { });
       }, { once: true });
     } else {
       videoEl.src = url;
       videoEl.addEventListener('loadeddata', () => {
         this.isBuffering.set(false);
-        videoEl.play().catch(() => {});
+        videoEl.play().catch(() => { });
       }, { once: true });
     }
   }
@@ -117,7 +117,7 @@ export class VideoPlayer implements OnDestroy {
     if (!videoEl) return;
 
     if (videoEl.paused) {
-      videoEl.play().catch(() => {});
+      videoEl.play().catch(() => { });
     } else {
       videoEl.pause();
     }

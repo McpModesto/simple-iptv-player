@@ -4,8 +4,8 @@ Reproductor de listas IPTV (M3U/M3U8) de escritorio, construido con **Angular** 
 
 Carga tus playlists desde una URL o un archivo local, navega por los canales agrupados por categoría y reproduce streams en directo con soporte HLS.
 
-![Captura de la aplicación](screenshot.png)
-![Captura de la aplicación 2](screenshot-2.png)
+![Captura de la aplicación](screenshots/screenshot.png)
+![Captura de la aplicación 2](screenshots/screenshot-2.png)
 
 ## Tecnologías
 
@@ -35,7 +35,7 @@ Carga tus playlists desde una URL o un archivo local, navega por los canales agr
 
 ```bash
 git clone <url-del-repositorio>
-cd electron-iptv
+cd simple-iptv-player
 npm install
 ```
 
@@ -81,4 +81,4 @@ src/
 
 ## Licencia
 
-Este proyecto es privado.
+Este proyecto está bajo la licencia MIT.

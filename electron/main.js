@@ -74,7 +74,7 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:4200');
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'electron-iptv', 'browser', 'index.html'));
+    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'simple-iptv-player', 'browser', 'index.html'));
   }
 
   mainWindow.once('ready-to-show', () => {
