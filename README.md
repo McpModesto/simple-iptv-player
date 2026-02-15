@@ -1,59 +1,83 @@
-# ElectronIptv
+# Simple IPTV Player
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+Reproductor de listas IPTV (M3U/M3U8) de escritorio, construido con **Angular** y **Electron**.
 
-## Development server
+Carga tus playlists desde una URL o un archivo local, navega por los canales agrupados por categoría y reproduce streams en directo con soporte HLS.
 
-To start a local development server, run:
+![Captura de la aplicación](screenshot.png)
 
-```bash
-ng serve
-```
+## Tecnologías
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Tecnología | Uso |
+|---|---|
+| [Angular 21](https://angular.dev/) | Framework de frontend (componentes, signals, routing) |
+| [Electron 40](https://www.electronjs.org/) | Empaquetado como app de escritorio multiplataforma |
+| [HLS.js](https://github.com/video-dev/hls.js/) | Reproducción de streams HLS en el navegador |
+| [TypeScript 5.9](https://www.typescriptlang.org/) | Lenguaje principal del proyecto |
+| [Vitest](https://vitest.dev/) | Tests unitarios |
+| [electron-builder](https://www.electron.build/) | Generación de instaladores |
 
-## Code scaffolding
+## Características
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Carga de playlists M3U desde URL o archivo local.
+- Listado de canales con búsqueda y filtrado por grupo.
+- Reproductor de vídeo con controles personalizados (play/pause, volumen, pantalla completa).
+- Guardado de playlists en `localStorage` para acceso rápido.
+- Barra lateral colapsable.
 
-```bash
-ng generate component component-name
-```
+## Requisitos previos
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- [Node.js](https://nodejs.org/) (v18 o superior)
+- npm
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Instalación
 
 ```bash
-ng test
+git clone <url-del-repositorio>
+cd electron-iptv
+npm install
 ```
 
-## Running end-to-end tests
+## Uso
 
-For end-to-end (e2e) testing, run:
+### Desarrollo (navegador)
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Abre `http://localhost:4200` en el navegador.
 
-## Additional Resources
+### Desarrollo (Electron)
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+npm run electron:dev
+```
+
+Levanta el servidor de Angular y abre la ventana de Electron automáticamente.
+
+### Compilar para producción
+
+```bash
+npm run electron:build
+```
+
+Genera el instalador en la carpeta `release/`.
+
+## Estructura del proyecto
+
+```
+electron/          → Proceso principal de Electron (main.js, preload.js)
+src/
+  app/
+    components/
+      channel-list/    → Lista de canales con búsqueda y grupos
+      playlist-loader/ → Modal para cargar playlists
+      video-player/    → Reproductor de vídeo con HLS.js
+    models/            → Interfaces (Channel, ChannelGroup, SavedPlaylist)
+    services/          → PlaylistService, StorageService
+```
+
+## Licencia
+
+Este proyecto es privado.
