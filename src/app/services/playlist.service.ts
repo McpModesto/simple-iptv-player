@@ -61,7 +61,7 @@ export class PlaylistService {
     this._selectedGroup.set(group);
   }
 
-  async loadFromUrl(url: string): Promise<void> {
+  async loadFromUrl(url: string, customName?: string): Promise<void> {
     this._isLoading.set(true);
     try {
       const response = await fetch(url);
@@ -70,7 +70,7 @@ export class PlaylistService {
       }
       const text = await response.text();
       this.parseM3U(text);
-      const name = this.extractPlaylistName(url);
+      const name = customName || this.extractPlaylistName(url);
       this._playlistName.set(name);
 
       this.storage.savePlaylist({

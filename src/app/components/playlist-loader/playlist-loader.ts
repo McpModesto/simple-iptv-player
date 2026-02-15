@@ -15,6 +15,7 @@ export class PlaylistLoader {
   readonly loaded = output<void>();
 
   protected readonly url = signal('');
+  protected readonly customName = signal('');
   protected readonly error = signal('');
   protected readonly isLoading = signal(false);
   protected readonly showModal = signal(false);
@@ -22,11 +23,13 @@ export class PlaylistLoader {
   open(): void {
     this.showModal.set(true);
     this.error.set('');
+    this.customName.set('');
   }
 
   close(): void {
     this.showModal.set(false);
     this.error.set('');
+    this.customName.set('');
   }
 
   protected async loadUrl(): Promise<void> {
@@ -40,7 +43,8 @@ export class PlaylistLoader {
     this.error.set('');
 
     try {
-      await this.playlist.loadFromUrl(url);
+      const name = this.customName().trim() || undefined;
+      await this.playlist.loadFromUrl(url, name);
       this.showModal.set(false);
       this.loaded.emit();
     } catch (e) {
@@ -60,7 +64,8 @@ export class PlaylistLoader {
 
     try {
       const text = await file.text();
-      this.playlist.loadFromText(text, file.name.replace(/\.(m3u8?|txt)$/i, ''));
+      const name = this.customName().trim() || file.name.replace(/\.(m3u8?|txt)$/i, '');
+      this.playlist.loadFromText(text, name);
       this.showModal.set(false);
       this.loaded.emit();
     } catch (e) {
