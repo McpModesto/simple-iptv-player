@@ -3,6 +3,37 @@ const path = require('path');
 
 /** @type {BrowserWindow | null} */
 let mainWindow = null;
+/** @type {BrowserWindow | null} */
+let aboutWindow = null;
+
+function createAboutWindow() {
+  if (aboutWindow) {
+    aboutWindow.focus();
+    return;
+  }
+
+  aboutWindow = new BrowserWindow({
+    width: 340,
+    height: 360,
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
+    fullscreenable: false,
+    parent: mainWindow,
+    modal: true,
+    title: 'Acerca de',
+    show: false,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  aboutWindow.setMenu(null);
+  aboutWindow.loadFile(path.join(__dirname, 'about.html'));
+  aboutWindow.once('ready-to-show', () => aboutWindow.show());
+  aboutWindow.on('closed', () => { aboutWindow = null; });
+}
 
 function createMenu() {
   const menuTemplate = [
@@ -15,34 +46,15 @@ function createMenu() {
       ]
     },
     {
-      label: 'Edit',
-      submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
-        { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' }
-      ]
-    },
-    {
       label: 'View',
       submenu: [
-        { role: 'reload' },
-        { role: 'forceReload' },
-        { role: 'toggleDevTools' },
-        { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
-        { type: 'separator' },
         { role: 'togglefullscreen' }
       ]
     },
     {
       label: 'Help',
       submenu: [
-        { label: 'About', click: () => { /* TODO: mostrar info de la app */ } }
+        { label: 'About', click: () => createAboutWindow() }
       ]
     }
   ];
