@@ -6,6 +6,7 @@ declare global {
       platform: string;
       send: (channel: string, ...args: unknown[]) => void;
       on: (channel: string, callback: (...args: unknown[]) => void) => void;
+      setLang: (lang: string) => void;
     };
   }
 }

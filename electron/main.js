@@ -5,6 +5,31 @@ const path = require('path');
 let mainWindow = null;
 /** @type {BrowserWindow | null} */
 let aboutWindow = null;
+/** @type {'es' | 'en'} */
+let currentLang = 'es';
+
+const MENU_LABELS = {
+  es: {
+    file: 'Archivo',
+    addPlaylist: 'Añadir Playlist',
+    exit: 'Salir',
+    view: 'Ver',
+    fullscreen: 'Pantalla completa',
+    help: 'Ayuda',
+    about: 'Acerca de',
+    aboutTitle: 'Acerca de',
+  },
+  en: {
+    file: 'File',
+    addPlaylist: 'Add Playlist',
+    exit: 'Exit',
+    view: 'View',
+    fullscreen: 'Toggle Full Screen',
+    help: 'Help',
+    about: 'About',
+    aboutTitle: 'About',
+  },
+};
 
 function createAboutWindow() {
   if (aboutWindow) {
@@ -21,7 +46,7 @@ function createAboutWindow() {
     fullscreenable: false,
     parent: mainWindow,
     modal: true,
-    title: 'Acerca de',
+    title: MENU_LABELS[currentLang].aboutTitle,
     show: false,
     webPreferences: {
       contextIsolation: true,
@@ -35,26 +60,27 @@ function createAboutWindow() {
   aboutWindow.on('closed', () => { aboutWindow = null; });
 }
 
-function createMenu() {
+function buildMenu(lang) {
+  const L = MENU_LABELS[lang] || MENU_LABELS['es'];
   const menuTemplate = [
     {
-      label: 'File',
+      label: L.file,
       submenu: [
-        { label: 'Add Playlist', accelerator: 'CmdOrCtrl+O', click: () => { if (mainWindow) mainWindow.webContents.send('fromMain', 'open-playlist'); } },
+        { label: L.addPlaylist, accelerator: 'CmdOrCtrl+O', click: () => { if (mainWindow) mainWindow.webContents.send('fromMain', 'open-playlist'); } },
         { type: 'separator' },
-        { role: 'quit', label: 'Exit' }
+        { role: 'quit', label: L.exit }
       ]
     },
     {
-      label: 'View',
+      label: L.view,
       submenu: [
-        { role: 'togglefullscreen' }
+        { role: 'togglefullscreen', label: L.fullscreen }
       ]
     },
     {
-      label: 'Help',
+      label: L.help,
       submenu: [
-        { label: 'About', click: () => createAboutWindow() }
+        { label: L.about, click: () => createAboutWindow() }
       ]
     }
   ];
@@ -98,8 +124,15 @@ function createWindow() {
   });
 }
 
+ipcMain.on('set-lang', (_event, lang) => {
+  if (lang === 'es' || lang === 'en') {
+    currentLang = lang;
+    buildMenu(lang);
+  }
+});
+
 app.whenReady().then(() => {
-  createMenu();
+  buildMenu(currentLang);
   createWindow();
 });
 

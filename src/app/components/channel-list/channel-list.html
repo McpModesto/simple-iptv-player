@@ -5,22 +5,43 @@
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.35-4.35" />
     </svg>
-    <input type="text" placeholder="Buscar canales..." [value]="playlist.searchQuery()" (input)="onSearch($event)"
+    <input type="text" [placeholder]="i18n.t().searchPlaceholder" [value]="playlist.searchQuery()" (input)="onSearch($event)"
       class="search-input" />
   </div>
 
-  <!-- Group filter -->
+  <!-- Group filter dropdown -->
   @if (playlist.groups().length > 1) {
-  <div class="group-filter">
-    <button class="group-chip" [class.active]="playlist.selectedGroup() === null" (click)="selectGroup(null)">
-      Todos
+  <div class="group-selector">
+    <button class="group-dropdown-btn" (click)="toggleGroupDropdown()">
+      <span class="group-dropdown-label">
+        @if (playlist.selectedGroup()) {
+          {{ playlist.selectedGroup() === 'Sin grupo' ? i18n.t().noGroup : playlist.selectedGroup() }}
+        } @else {
+          {{ i18n.t().allGroups }}
+        }
+      </span>
+      <span class="group-dropdown-badge">{{ playlist.filteredChannels().length }}</span>
+      <svg class="group-dropdown-chevron" [class.open]="groupDropdownOpen()" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
     </button>
-    @for (group of playlist.groups(); track group.name) {
-    <button class="group-chip" [class.active]="playlist.selectedGroup() === group.name"
-      (click)="selectGroup(group.name)">
-      {{ group.name }}
-      <span class="group-count">{{ group.channels.length }}</span>
-    </button>
+
+    @if (groupDropdownOpen()) {
+    <div class="group-dropdown-overlay" (click)="closeGroupDropdown()"></div>
+    <div class="group-dropdown-panel">
+      <button class="group-option" [class.active]="playlist.selectedGroup() === null" (click)="selectGroup(null)">
+        <span class="group-option-name">{{ i18n.t().allGroups }}</span>
+        <span class="group-option-count">{{ playlist.channels().length }}</span>
+      </button>
+      @for (group of playlist.groups(); track group.name) {
+      <button class="group-option" [class.active]="playlist.selectedGroup() === group.name"
+        (click)="selectGroup(group.name)">
+        <span class="group-option-name">{{ group.name === 'Sin grupo' ? i18n.t().noGroup : group.name }}</span>
+        <span class="group-option-count">{{ group.channels.length }}</span>
+      </button>
+      }
+    </div>
     }
   </div>
   }
@@ -52,7 +73,7 @@
     } @empty {
     @if (playlist.channels().length > 0) {
     <div class="empty-state">
-      <p>No se encontraron canales</p>
+      <p>{{ i18n.t().noChannelsFound }}</p>
     </div>
     }
     }

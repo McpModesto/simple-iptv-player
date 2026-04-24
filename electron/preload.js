@@ -15,4 +15,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.on(channel, (_event, ...args) => callback(...args));
     }
   },
+  setLang: (lang) => {
+    ipcRenderer.send('set-lang', lang);
+  },
 });

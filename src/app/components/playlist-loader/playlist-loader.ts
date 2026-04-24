@@ -2,6 +2,7 @@ import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PlaylistService } from '../../services/playlist.service';
 import { StorageService } from '../../services/storage.service';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-playlist-loader',
@@ -12,6 +13,7 @@ import { StorageService } from '../../services/storage.service';
 export class PlaylistLoader {
   private readonly playlist = inject(PlaylistService);
   protected readonly storage = inject(StorageService);
+  protected readonly i18n = inject(I18nService);
   readonly loaded = output<void>();
 
   protected readonly url = signal('');
@@ -35,7 +37,7 @@ export class PlaylistLoader {
   protected async loadUrl(): Promise<void> {
     const url = this.url().trim();
     if (!url) {
-      this.error.set('Ingresa una URL válida');
+      this.error.set(this.i18n.t().invalidUrl);
       return;
     }
 
@@ -48,7 +50,7 @@ export class PlaylistLoader {
       this.showModal.set(false);
       this.loaded.emit();
     } catch (e) {
-      this.error.set('No se pudo cargar la playlist. Verifica la URL.');
+      this.error.set(this.i18n.t().loadUrlError);
     } finally {
       this.isLoading.set(false);
     }
@@ -69,7 +71,7 @@ export class PlaylistLoader {
       this.showModal.set(false);
       this.loaded.emit();
     } catch (e) {
-      this.error.set('Error al leer el archivo. Verifica que sea un archivo M3U válido.');
+      this.error.set(this.i18n.t().loadFileError);
     } finally {
       this.isLoading.set(false);
     }
@@ -84,7 +86,7 @@ export class PlaylistLoader {
       this.showModal.set(false);
       this.loaded.emit();
     } catch (e) {
-      this.error.set('No se pudo cargar la playlist guardada.');
+      this.error.set(this.i18n.t().loadSavedError);
     } finally {
       this.isLoading.set(false);
     }

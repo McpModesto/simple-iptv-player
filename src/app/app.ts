@@ -4,6 +4,7 @@ import { VideoPlayer } from './components/video-player/video-player';
 import { PlaylistLoader } from './components/playlist-loader/playlist-loader';
 import { PlaylistService } from './services/playlist.service';
 import { StorageService } from './services/storage.service';
+import { I18nService } from './services/i18n.service';
 import { Channel } from './models/channel.model';
 
 @Component({
@@ -16,6 +17,7 @@ export class App implements OnInit, OnDestroy {
   private readonly ngZone = inject(NgZone);
   protected readonly playlist = inject(PlaylistService);
   protected readonly storage = inject(StorageService);
+  protected readonly i18n = inject(I18nService);
   protected readonly currentChannel = signal<Channel | null>(null);
   protected readonly sidebarCollapsed = signal(false);
   protected readonly playlistLoader = viewChild<PlaylistLoader>('loader');

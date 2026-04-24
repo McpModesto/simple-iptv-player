@@ -11,7 +11,7 @@
         <span class="logo-text">IPTV Player</span>
       </div>
       }
-      <button class="icon-btn" (click)="toggleSidebar()" title="Toggle sidebar">
+      <button class="icon-btn" (click)="toggleSidebar()" [title]="i18n.t().toggleSidebar">
         @if (sidebarCollapsed()) {
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
@@ -31,21 +31,21 @@
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
         </svg>
-        Cargar Playlist
+        {{ i18n.t().loadPlaylist }}
       </button>
     </div>
 
     @if (playlist.channels().length > 0) {
     <div class="playlist-info">
       <span class="playlist-name">{{ playlist.playlistName() }}</span>
-      <span class="channel-count">{{ playlist.channels().length }} canales</span>
+      <span class="channel-count">{{ playlist.channels().length }} {{ i18n.t().channels }}</span>
     </div>
     <app-channel-list (channelSelected)="onChannelSelected($event)" />
     } @else {
     <div class="sidebar-empty">
       @if (storage.savedPlaylists().length > 0) {
       <div class="saved-playlists-sidebar">
-        <span class="saved-section-label">Playlists guardadas</span>
+        <span class="saved-section-label">{{ i18n.t().savedPlaylists }}</span>
         <div class="saved-sidebar-list">
           @for (saved of storage.savedPlaylists(); track saved.id) {
           <button class="saved-sidebar-item" (click)="loadSavedPlaylist(saved.id)">
@@ -64,9 +64,9 @@
             </div>
             <div class="saved-sidebar-info">
               <span class="saved-sidebar-name">{{ saved.name }}</span>
-              <span class="saved-sidebar-meta">{{ saved.channelCount }} canales</span>
+              <span class="saved-sidebar-meta">{{ saved.channelCount }} {{ i18n.t().channels }}</span>
             </div>
-            <button class="saved-sidebar-delete" (click)="removeSavedPlaylist($event, saved.id)" title="Eliminar">
+            <button class="saved-sidebar-delete" (click)="removeSavedPlaylist($event, saved.id)" [title]="i18n.t().delete">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -81,11 +81,34 @@
         <path
           d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z" />
       </svg>
-      <p>Carga una playlist M3U para empezar</p>
+      <p>{{ i18n.t().emptyState }}</p>
       }
     </div>
     }
     }
+
+    <!-- Language selector footer -->
+    <div class="sidebar-footer">
+      @if (!sidebarCollapsed()) {
+      <div class="lang-toggle">
+        <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <button class="lang-btn" [class.active]="i18n.lang() === 'es'" (click)="i18n.setLang('es')">ES</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" [class.active]="i18n.lang() === 'en'" (click)="i18n.setLang('en')">EN</button>
+      </div>
+      } @else {
+      <button class="icon-btn lang-icon-btn" (click)="i18n.toggle()"
+        [title]="i18n.lang() === 'es' ? 'Switch to English' : 'Cambiar a Español'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+      </button>
+      }
+    </div>
   </aside>
 
   <!-- Main content -->

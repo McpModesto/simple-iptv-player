@@ -3,12 +3,14 @@ import {
   ElementRef,
   OnDestroy,
   effect,
+  inject,
   input,
   signal,
   viewChild,
 } from '@angular/core';
 import Hls from 'hls.js';
 import { Channel } from '../../models/channel.model';
+import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-video-player',
@@ -17,6 +19,7 @@ import { Channel } from '../../models/channel.model';
 })
 export class VideoPlayer implements OnDestroy {
   readonly channel = input<Channel | null>(null);
+  private readonly i18n = inject(I18nService);
 
   protected readonly videoRef = viewChild<ElementRef<HTMLVideoElement>>('videoEl');
   protected readonly isPlaying = signal(false);
@@ -76,15 +79,15 @@ export class VideoPlayer implements OnDestroy {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              this.errorMessage.set('Error de red. Reintentando...');
+              this.errorMessage.set(this.i18n.t().networkError);
               this.hls?.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              this.errorMessage.set('Error de media. Recuperando...');
+              this.errorMessage.set(this.i18n.t().mediaError);
               this.hls?.recoverMediaError();
               break;
             default:
-              this.errorMessage.set('Error al reproducir el canal.');
+              this.errorMessage.set(this.i18n.t().playbackError);
               this.destroyHls();
               break;
           }

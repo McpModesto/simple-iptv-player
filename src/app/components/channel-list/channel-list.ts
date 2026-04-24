@@ -1,5 +1,6 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { PlaylistService } from '../../services/playlist.service';
+import { I18nService } from '../../services/i18n.service';
 import { Channel } from '../../models/channel.model';
 
 @Component({
@@ -9,9 +10,11 @@ import { Channel } from '../../models/channel.model';
 })
 export class ChannelList {
   protected readonly playlist = inject(PlaylistService);
+  protected readonly i18n = inject(I18nService);
   readonly channelSelected = output<Channel>();
 
   protected selectedChannel: Channel | null = null;
+  protected readonly groupDropdownOpen = signal(false);
 
   protected selectChannel(channel: Channel): void {
     this.selectedChannel = channel;
@@ -20,6 +23,15 @@ export class ChannelList {
 
   protected selectGroup(group: string | null): void {
     this.playlist.setSelectedGroup(group);
+    this.groupDropdownOpen.set(false);
+  }
+
+  protected toggleGroupDropdown(): void {
+    this.groupDropdownOpen.update((v) => !v);
+  }
+
+  protected closeGroupDropdown(): void {
+    this.groupDropdownOpen.set(false);
   }
 
   protected onSearch(event: Event): void {
